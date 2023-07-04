@@ -1,95 +1,98 @@
-import Image from 'next/image'
-import styles from './page.module.css'
-
+'use client'
+import './page.css'
+import Header from "@/components/shard/Navigation/Header";
+import {SlideAnimation} from "@/components/shard/Image/slide-animation";
+import {HTMLDivElement, useEffect} from "react";
+import Link from "next/link";
+import Gsap from "gsap";
+import {MouseEvent} from "react";
+import Image from "next/image";
+import {Artists} from "@/constants/artists";
 export default function Home() {
-  return (
-    <main className={styles.main}>
-      <div className={styles.description}>
-        <p>
-          Get started by editing&nbsp;
-          <code className={styles.code}>app/page.tsx</code>
-        </p>
-        <div>
-          <a
-            href="https://vercel.com?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            By{' '}
-            <Image
-              src="/vercel.svg"
-              alt="Vercel Logo"
-              className={styles.vercelLogo}
-              width={100}
-              height={24}
-              priority
-            />
-          </a>
-        </div>
-      </div>
-
-      <div className={styles.center}>
-        <Image
-          className={styles.logo}
-          src="/next.svg"
-          alt="Next.js Logo"
-          width={180}
-          height={37}
-          priority
-        />
-      </div>
-
-      <div className={styles.grid}>
-        <a
-          href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Docs <span>-&gt;</span>
-          </h2>
-          <p>Find in-depth information about Next.js features and API.</p>
-        </a>
-
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Learn <span>-&gt;</span>
-          </h2>
-          <p>Learn about Next.js in an interactive course with&nbsp;quizzes!</p>
-        </a>
-
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Templates <span>-&gt;</span>
-          </h2>
-          <p>Explore the Next.js 13 playground.</p>
-        </a>
-
-        <a
-          href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Deploy <span>-&gt;</span>
-          </h2>
-          <p>
-            Instantly deploy your Next.js site to a shareable URL with Vercel.
-          </p>
-        </a>
-      </div>
-    </main>
-  )
+    useEffect(() => {
+        Gsap.fromTo('#container', {
+            duration:2,
+            opacity:0,
+        }, {
+            duration:2,
+            opacity:1,
+        })
+    },[])
+    const activeAnimation = (visual_id:string, font_id:string) => {
+        Gsap.to(`#${visual_id}`, {
+            opacity:1,
+            scale:1,
+        })
+        Gsap.to('#link', {
+            duration:1,
+            color:'#fff',
+        })
+        Gsap.fromTo(`#${font_id}`, {
+            y:30,
+            opacity:0,
+        }, {
+            y:0,
+            opacity:1,
+        })
+    }
+    const removeAnimation = (visual_id:string, font_id:string) => {
+        Gsap.to(`#${visual_id}`, {
+            opacity:0,
+            scale:1.05,
+        })
+        Gsap.to('#link', {
+            duration:1,
+            color:'#000',
+        })
+        Gsap.fromTo(`#${font_id}`, {
+            y:0,
+            opacity:1,
+        }, {
+            y:-40,
+            opacity:0,
+        })
+    }
+    const HoverMove = (e:MouseEvent<HTMLDivElement>) => {
+        for(let i = 0; i < Artists.length; i++) {
+            let x = Math.round(e.pageX / 10 + Math.random() * 3);
+            let y = Math.round(e.pageY / 10 + Math.random() * 16);
+            Gsap.to(`#${Artists[i].id}`, {
+                duration:2,
+                transform:`translate(${x}px, ${y}px)`,
+            })
+        }
+    }
+    return (
+        <main id="container" className="main">
+            <div className="window" onMouseMove={(e) => HoverMove(e)}>
+                <div className="window__font">
+                    {Artists.map((artist,index) => (
+                        <Link key={index} href="">
+                            <p className="artist__name">
+                                <span id={artist.id + index}>{artist.name}</span>
+                            </p>
+                        </Link>
+                    ))}
+                </div>
+                <div className="window__scroll">
+                    <div className="window__scroll__work">
+                        {Artists.map((artist,index) => (
+                            <Link href={`/artists/${artist.artist_id}`} className={artist.id} key={index}>
+                            <div onMouseLeave={() => removeAnimation(artist.id+index+'visual', artist.id+index)} onMouseEnter={() => activeAnimation(artist.id+index+'visual', artist.id+index)} >
+                                <SlideAnimation ms={index*0.1 * 1000} alt={artist.name} src={artist.image_link} id={artist.id}/>
+                            </div>
+                            </Link>
+                        ))}
+                    </div>
+                </div>
+                <div className="window__visual">
+                    {Artists.map((artist,index) => (
+                        <div key={index} id={artist.id+index+'visual'} className="visual__img__area">
+                            <img src={artist.image_link} alt={artist.name} width={500} height={500}/>
+                        </div>
+                    ))}
+                </div>
+            </div>
+        </main>
+    )
 }

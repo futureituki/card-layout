@@ -1,0 +1,10 @@
+.img_anim {
+    height:100%;
+    width:100%;
+    margin:20rem;
+    /*transform:scale(0,0.025);*/
+    object-fit: contain;
+    cursor: pointer;
+    clip-path: inset(calc(50% - 1px) 100% calc(50% - 1px) 0);
+    pointer-events: none;
+}

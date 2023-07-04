@@ -1,0 +1,246 @@
+.artist_container {
+    opacity: 0;
+    width: 100%;
+    overflow: hidden;
+    background: #fff;
+}
+.top_visual {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    --height: 600rem;
+    padding-top: calc(50vh - var(--height)/2);
+}
+.top_visual img{
+    object-fit: contain;
+    width: 100vw;
+    padding:0 var(--margin-2);
+}
+.music__list {
+    display: flex;
+    flex-direction: column;
+    flex-wrap:wrap;
+    align-items: center;
+}
+.music {
+    margin: var(--margin-2) 0;
+    display: flex;
+    flex-direction:column;
+    gap:10rem;
+    width: calc(100vw / 2);
+}
+.music:nth-child(odd) {
+    transform: rotate(3deg)
+}
+.music:nth-child(even) {
+    transform: rotate(-3deg)
+}
+.music img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    object-position: center;
+}
+.music__name {
+    display: flex;
+    flex-direction: column;
+    line-height: 1.5;
+    color:#000;
+    font-size: 20rem;
+    font-weight: bold;
+    text-align: right;
+}
+.infinite__scroll {
+    display: block;
+    background: #d3d3d3;
+    padding:100rem 0;
+    position: relative;
+}
+.artists__name {
+    padding: 50rem var(--margin-4);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.artists__name h2{
+    font-size:40rem;
+    letter-spacing: 4rem;
+}
+.disc__name {
+    padding: 70rem var(--margin-4) 30rem var(--margin-4);
+}
+.disc__name h2 {
+    font-size:30rem;
+    letter-spacing: 4rem;
+}
+.artists__name h4{
+     font-size:20rem;
+     letter-spacing: 4rem;
+ }
+.name__left {
+    width: calc(100vw / 3);
+}
+.scroll__cover {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    /* background: linear-gradient(90deg, rgba(211,211,211,1) 0%, rgba(211,211,211,0) 100%); */
+    z-index: 2;
+    backdrop-filter: blur(5px);
+    transition: all .2s ease-out;
+}
+.scroll__cover:hover {
+    backdrop-filter: blur(0px);
+}
+/*
+右から左へ
+----------------------------*/
+@keyframes infinity-scroll-left {
+    from {
+        transform: translateX(0);
+    }
+    to {
+        transform: translateX(-100%);
+    }
+}
+
+/*
+IE11対策
+----------------------------*/
+.d-demo {
+    display: -ms-grid;
+    height: 200rem;
+    display: flex;
+    align-items: center;
+}
+/*----------------------------*/
+
+.d-demo__wrap {
+    display: flex;
+    overflow: hidden;
+    gap:30rem;
+    transform: rotate(5deg);
+}
+
+.d-demo__list {
+    display: flex;
+    list-style: none;
+    gap:30rem;
+}
+
+.d-demo__list--left{
+    animation :infinity-scroll-left 30s infinite linear 0.5s both;
+}
+
+.d-demo__item {
+    width: calc(100vw / 7);
+}
+.d-demo__item > img{
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+.main__text {
+    position: absolute;
+    top:50%;
+    left:50%;
+    transform: translate(-50%,-50%);
+    font-size: 40rem;
+    letter-spacing: 4rem;
+    z-index: 5;
+    color: #fff;
+    font-weight: bold;
+    pointer-events: none;
+    text-align: center;
+}
+.related_artists ul {
+    display: flex;
+    flex-wrap: wrap;
+}
+.related_artists ul li {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 400rem;
+    height: 400rem;
+}
+.related_artists ul li::before {
+    content: "";
+    display: block;
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top:0;
+    left:0;
+    z-index: 1;
+    opacity: 0;
+    background: #000;
+    transition: all 0.5s;
+}
+.related_artists ul li a img{
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+}
+.related_artists__name{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+    opacity: 0;
+    transition: all 0.5s;
+    color: #fff;
+    z-index: 5;
+    font-weight:bold;
+    font-size: 30rem;
+    text-align: center;
+    line-height: 1.75;
+}
+.related_artists ul li:hover::before {
+    opacity:0.5
+}
+.related_artists ul li:hover .related_artists__name{
+    opacity: 1;
+}
+.more__button {
+    display:grid;
+    place-items:center;
+    margin: var(--margin-1) 0 var(--margin-2) 0;
+}
+@media (max-width:750px) {
+    .top_visual {
+        padding-top:0;
+    }
+    .top_visual img {
+        padding:80rem 0 20rem 0;
+        height: 100%;
+    }
+    .artists__name {
+        padding: 20rem var(--margin-1);
+    }
+    .artists__name h2 {
+        font-size:20rem;
+    }
+    .artists__name h4 {
+        font-size:10rem;
+    }
+    .disc__name {
+        padding: 20rem var(--margin-1);
+    }
+    .disc__name h2 {
+        font-size:10rem;
+    }
+    .music {
+        margin: var(--margin-1) 0;
+    }
+    .music__name {
+        font-size: 10rem;
+    }
+    .d-demo__item {
+        width: calc(100vw / 2);
+    }
+}
