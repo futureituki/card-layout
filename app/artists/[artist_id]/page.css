@@ -3,6 +3,7 @@
     width: 100%;
     overflow: hidden;
     background: #fff;
+    position: relative;
 }
 .top_visual {
     display: flex;
@@ -16,26 +17,27 @@
     width: 100vw;
     padding:0 var(--margin-2);
 }
-.music__list {
+.disc__list {
     display: flex;
     flex-direction: column;
     flex-wrap:wrap;
     align-items: center;
 }
-.music {
+.disc {
     margin: var(--margin-2) 0;
     display: flex;
     flex-direction:column;
     gap:10rem;
-    width: calc(100vw / 2);
+    width: 40vw;
 }
-.music:nth-child(odd) {
+.disc:nth-child(odd) {
     transform: rotate(3deg)
 }
-.music:nth-child(even) {
+.disc:nth-child(even) {
     transform: rotate(-3deg)
 }
-.music img {
+.disc img {
+    cursor: pointer;
     width: 100%;
     height: 100%;
     object-fit: contain;
@@ -160,52 +162,69 @@ IE11対策
     flex-wrap: wrap;
 }
 .related_artists ul li {
+    border-right: 1px solid #d3d3d3;
     position: relative;
     display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 400rem;
-    height: 400rem;
-}
-.related_artists ul li::before {
-    content: "";
-    display: block;
-    width: 100%;
+    flex-direction: column;
+    width: calc(100vw / 4);
     height: 100%;
-    position: absolute;
-    top:0;
-    left:0;
-    z-index: 1;
-    opacity: 0;
-    background: #000;
-    transition: all 0.5s;
+    cursor: pointer;
+}
+/*.related_artists ul li::before {*/
+/*    content: "";*/
+/*    display: block;*/
+/*    width: 100%;*/
+/*    height: 100%;*/
+/*    position: absolute;*/
+/*    top:0;*/
+/*    left:0;*/
+/*    z-index: 1;*/
+/*    opacity: 0;*/
+/*    background: #000;*/
+/*    transition: all 0.5s;*/
+/*}*/
+.related_artists ul li a {
+    display:flex;
+    flex-direction: column;
 }
 .related_artists ul li a img{
-    width: 100%;
-    height: 100%;
+    width: 400rem;
+    height: 400rem;
     object-fit: cover;
     object-position: center;
 }
+.related__artists__info {
+    display: block;
+    width: 90%;
+    margin: 20rem auto;
+}
+.related__artists__info span {
+    color: #ababab;
+}
+.related__artists__genre {
+    display:flex;
+    gap:10rem;
+    margin:10rem 0;
+}
 .related_artists__name{
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%,-50%);
-    opacity: 0;
-    transition: all 0.5s;
-    color: #fff;
+    /*position: absolute;*/
+    /*top: 50%;*/
+    /*left: 50%;*/
+    /*transform: translate(-50%,-50%);*/
+    /*opacity: 0;*/
+    /*transition: all 0.5s;*/
+    color: #000;
     z-index: 5;
-    font-weight:bold;
-    font-size: 30rem;
-    text-align: center;
+    font-weight:400;
+    font-size: 14rem;
     line-height: 1.75;
 }
-.related_artists ul li:hover::before {
-    opacity:0.5
-}
-.related_artists ul li:hover .related_artists__name{
-    opacity: 1;
-}
+/*.related_artists ul li:hover::before {*/
+/*    opacity:0.5*/
+/*}*/
+/*.related_artists ul li:hover .related_artists__name{*/
+/*    opacity: 1;*/
+/*}*/
 .more__button {
     display:grid;
     place-items:center;
@@ -216,7 +235,7 @@ IE11対策
         padding-top:0;
     }
     .top_visual img {
-        padding:80rem 0 20rem 0;
+        padding: 40rem 0 0 0;
         height: 100%;
     }
     .artists__name {
@@ -236,6 +255,7 @@ IE11対策
     }
     .music {
         margin: var(--margin-1) 0;
+        width: 60vw;
     }
     .music__name {
         font-size: 10rem;
@@ -243,4 +263,83 @@ IE11対策
     .d-demo__item {
         width: calc(100vw / 2);
     }
+}
+.side__music__menu {
+    position: fixed;
+    width: 30vw;
+    height: 100vh;
+    overflow: auto;
+    backdrop-filter: blur(20px);
+    top:0%;
+    right: -50%;
+    transition: all .5s ease;
+}
+.side__music__menu .music__list{
+    height: 100%;
+    width: 100%;
+    margin:var(--margin-2) 0 ;
+    font-size: 20rem;
+    display: flex;
+    flex-direction: column;
+    gap:30rem;
+    position: absolute;
+    top:50%;
+    left:60%;
+    transform:translate(-50%,-50%);
+    color:#000;
+}
+.music__list li {
+    display: flex;
+    align-items: center;
+    gap:20rem;
+    cursor: pointer;
+    position: relative;
+}
+.music__list span {
+    display: block;
+    width: 20rem;
+}
+.music__list img {
+    object-fit: cover;
+    border-radius: 6rem;
+}
+.disc__icon {
+    position: relative;
+}
+.disc__icon span {
+    content: '';
+    position: absolute;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.3);
+    z-index:2;
+}
+.play_canvas {
+    position: absolute;
+    width: 20px;
+    height: 30px;
+    left: 50%;
+    top:40%;
+    transform:translate(-50%,-50%);
+    z-index: 5;
+}
+/* history */
+.history {
+    overflow: scroll;
+    position: relative;
+    min-height: 100vw;
+    margin-bottom: 340rem;
+}
+.history .parts__window:not(:first-child) {
+    position: relative;
+    margin-top:120rem;
+}
+.history .parts__window:nth-child(2) {
+    --index:2;
+    margin-left: calc(var(--index) * 40rem);
+}
+.history .parts__window:nth-child(3) {
+    --index:3;
+    margin-left: calc(var(--index) * 40rem);
 }

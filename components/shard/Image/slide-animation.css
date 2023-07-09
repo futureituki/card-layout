@@ -4,7 +4,9 @@
     margin:20rem;
     /*transform:scale(0,0.025);*/
     object-fit: contain;
-    cursor: pointer;
-    clip-path: inset(calc(50% - 1px) 100% calc(50% - 1px) 0);
-    pointer-events: none;
+    clip-path: inset(calc(100% - 1px) 100% calc(50% - 1px) 0);
+    cursor:auto;
+}
+a {
+    cursor: auto;
 }

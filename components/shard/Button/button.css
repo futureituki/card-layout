@@ -9,17 +9,8 @@
     opacity: .6;
     border-radius: 20rem;
     font-size: 16rem;
-    font-family: neue-haas-unica,iroha-26tubaki-stdn,sans-serif;
+    font-family: neue-haas-unica, iroha-26tubaki-stdn, sans-serif;
     font-weight: 400;
     -webkit-font-smoothing: antialiased;
     transition: opacity .3s ease;
-}
-.primary__button span::before {
-    content: "";
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%,-50%);
-    height: calc(100% + 22px);
-    width: calc(100% + 22px);
 }

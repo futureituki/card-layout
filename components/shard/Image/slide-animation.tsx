@@ -11,9 +11,12 @@ interface Props {
 export const SlideAnimation:FC<Props> = ({id, src, alt, ms }) => {
     useEffect(() => {
         setTimeout(() => {
+            Gsap.to(`#${id+id}`, {
+                pointerEvents:'none',
+            })
             Gsap.fromTo(`#${id}`, {
                 duration:1,
-                clipPath:'inset(calc(50% - 1px) 100% calc(50% - 1px) 0)'
+                clipPath:'inset(calc(50% - 1px) 100% calc(50% - 1px) 0)',
                 // clipPath:'inset(calc(100% - 10px) 0% calc(0% - 0px) 0px)'
             }, {
                 duration:1,
@@ -21,7 +24,12 @@ export const SlideAnimation:FC<Props> = ({id, src, alt, ms }) => {
             })
             Gsap.to(`#${id}`, {
                 delay:2,
-                clipPath:'inset(calc(0% - 0px) 0% calc(0% - 0px) 0px)'
+                clipPath:'inset(calc(0% - 0px) 0% calc(0% - 0px) 0px)',
+                cursor:'pointer'
+            })
+            Gsap.to(`#${id+id}`, {
+                delay:2,
+                pointerEvents:'auto',
             })
         }, ms)
     },[id])

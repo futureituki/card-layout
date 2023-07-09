@@ -29,6 +29,7 @@
     height:120rem;
     position: relative;
     z-index: 3;
+    cursor: pointer;
 }
 .artist__area__name {
     font-size: 32rem;
@@ -68,7 +69,7 @@
     transition: all .2s ease;
     transform: scale(.8);
 }
-@media (max-width: 768px) {
+@media (max-width: 751px) {
     .all__artist__inner {
         padding-top: 100rem;
         padding-bottom: 86rem;

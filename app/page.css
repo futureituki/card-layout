@@ -1,12 +1,4 @@
-.main {
-  background: white;
-  height: 100vh;
-  width: 100vw;
-    opacity: 0;
-    overflow: hidden;
-}
 .window {
-  height:100vh;
   width:100vw;
   position: relative;
   overflow: hidden;
@@ -18,17 +10,6 @@
     height: 100vh;
     font-size: 1.4rem;
 }
-.window__scroll__work {
-    width: 350rem;
-    height: 350rem;
-    position: absolute;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    left: 0;
-    margin: auto;
-    z-index: 50;
-}
 .window__font {
     position: absolute;
     top: 0;
@@ -38,21 +19,6 @@
     width: 100vw;
     height: 100vh;
     color: white;
-}
-.artist__name span {
-    display:block;
-    transform: translateY(50px);
-}
-.artist__name {
-    top:50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    position: absolute;
-    overflow: hidden;
-    font-size: 40rem;
-    letter-spacing: 8rem;
-    transition: all 0.5s;
-    z-index: 5;
 }
 .window__visual {
     position: absolute;
@@ -106,57 +72,181 @@
 a {
     display: inline-block;
 }
-.sakurazaka46 {
-    width: 100%;
-    height: 100%;
-    --x-num: -650rem;
-    --y-num: -180rem;
-    transform: translate(var(--x-num), var(--y-num));
+.window__pc__scroll__work {
+    width: 350rem;
+    height: 350rem;
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    margin: auto;
+    z-index: 50;
 }
-.kingGnu {
-    width: 60%;
-    height: 60%;
-    --x-num: -660rem;
-    --y-num: -200rem;
-    transform: translate(var(--x-num), var(--y-num));
+.window__sp__scroll__work {
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    padding:var(--margin-1) 0;
 }
-.my_first_story {
-    width: 70%;
-    height: 70%;
-    --x-num: 400rem;
-    --y-num: -400rem;
-    transform: translate(var(--x-num), var(--y-num));
+.all__artist__link {
+    font-size: 18rem;
+    position: fixed;
+    top: 70rem;
+    right: 17rem;
+    font-width: 400;
+    z-index: 14;
+    height: fit-content;
+    width: fit-content;
+    writing-mode: vertical-rl;
+    letter-spacing: 2rem;
+    cursor: pointer;
 }
-.vaundy {
-    width: 80%;
-    height: 80%;
-    --x-num: 400rem;
-    --y-num: -900rem;
-    transform: translate(var(--x-num), var(--y-num));
+.all__artist__link span {
+    writing-mode:horizontal-tb;
+    font-weight: 600;
 }
-.keyakizaka46 {
-    width: 90%;
-    height:90%;
-    --x-num: 0rem;
-    --y-num: -1300rem;
-    transform: translate(var(--x-num), var(--y-num));
-}
-.eve {
-    width: 70%;
-    height:70%;
-    --x-num: -200rem;
-    --y-num: -1150rem;
-    transform: translate(var(--x-num), var(--y-num));
+@media (min-width: 751px) {
+    .artist__name span {
+        display:block;
+        transform: translateY(50px);
+    }
+    .artist__name {
+        top:50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        position: absolute;
+        overflow: hidden;
+        font-size: 40rem;
+        letter-spacing: 8rem;
+        transition: all 0.5s;
+        z-index: 5;
+    }
+    .main {
+        background: white;
+        height: 100vh;
+        width: 100vw;
+        overflow: hidden;
+    }
+    .window__pc__scroll__work {
+        display: block;
+    }
+    .window__sp__scroll__work {
+        display: none;
+    }
+    .window {
+        height:100vh;
+        overflow-x:hidden;
+    }
+    .sakurazaka46 {
+        width: 100%;
+        height: 100%;
+        --x-num: -550rem;
+        --y-num: -30rem;
+        transform: translate(var(--x-num), var(--y-num));
+    }
+    .kingGnu {
+        width: 60%;
+        height: 60%;
+        --x-num: -560rem;
+        --y-num: 0rem;
+        transform: translate(var(--x-num), var(--y-num));
+    }
+    .my_first_story {
+        width: 70%;
+        height: 70%;
+        --x-num: 550rem;
+        --y-num: -1050rem;
+        transform: translate(var(--x-num), var(--y-num));
+    }
+    .vaundy {
+        width: 80%;
+        height: 80%;
+        --x-num: 200rem;
+        --y-num: -1350rem;
+        transform: translate(var(--x-num), var(--y-num));
+    }
+    .keyakizaka46 {
+        width: 70%;
+        height:70%;
+        --x-num: -300rem;
+        --y-num: -1700rem;
+        transform: translate(var(--x-num), var(--y-num));
+    }
+    .eve {
+        width: 50%;
+        height:50%;
+        --x-num: -200rem;
+        --y-num: -1350rem;
+        transform: translate(var(--x-num), var(--y-num));
+    }
+    .spyair {
+        width: 70%;
+        height:70%;
+        --x-num: 200rem;
+        --y-num: -1800rem;
+        transform: translate(var(--x-num), var(--y-num));
+    }
+    .sekainoowari {
+        width: 80%;
+        height:100%;
+        --x-num: -100rem;
+        --y-num: -700rem;
+        transform: translate(var(--x-num), var(--y-num));
+    }
+    .spitz {
+        width: 70%;
+        height:70%;
+        --x-num: 500rem;
+        --y-num: -1650rem;
+        transform: translate(var(--x-num), var(--y-num));
+    }
+    .all__artist__link {
+        display: none;
+    }
 }
 @media (max-width: 750px) {
+    .window {
+        min-height: 100vh;
+    }
     .main {
     min-height: 100svh;
     position: relative;
     max-width: 100vw;
     overflow-x: hidden;
     }
+    .all__artist__link {
+        display: block;
+    }
     .window__scroll {
         position: relative;
         height: fit-content;
+    }
+    .window__visual {
+        display: none;
+    }
+    .window {
+        overflow-x:hidden;
+    }
+    .window__sp__scroll__work {
+        display: block;
+    }
+    .window__sp__scroll__work > a{
+        width: 80vw;
+        height: 40vh;
+        margin:0 0 50rem 0;
+    }
+    .window__sp__scroll__work > a > div {
+        height: 100%;
+        width: 100%;
+        /*object-fit: cover;*/
+    }
+    .window__sp__scroll__work > a > div > img {
+        height: 100%;
+        width: 100%;
+        object-fit: cover;
+    }
+    .window__pc__scroll__work {
+        display: none;
     }
 }
