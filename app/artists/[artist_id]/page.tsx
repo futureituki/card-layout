@@ -56,6 +56,7 @@ export default function Page({ params }: { params: { artist_id: string } }) {
     const [state, setState] = useState('');
     useEffect(() => {
         setAudio(new Audio())
+        audio?.setAttribute('playsInline', 'true');
         const context = new AudioContext();
         setAudioContext(context);
         return () => {
