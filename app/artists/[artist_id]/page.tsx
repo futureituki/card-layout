@@ -9,7 +9,6 @@ import axios, {AxiosError} from "axios";
 import Footer from '@/components/shard/Footer/footer'
 import Button from "@/components/shard/Button/button";
 import PartsWindow from "@/components/shard/Window/parts-window";
-// import {InView, useInView} from "react-intersection-observer";
 import {Disc, Music} from "@/type/disc";
 import {Artist} from "@/type/artists";
 import {getToken} from "@/utils/spotify_auth/auth";
@@ -22,7 +21,7 @@ export default function Page({ params }: { params: { artist_id: string } }) {
     const { ref: inViewRef, inView } = useInView();
     const [isPlaying, setIsPlaying] = useState(false)
     const setRefs = useCallback(
-        (node) => {
+        (node:any) => {
             ref.current = node;
             inViewRef(node);
         },
@@ -161,6 +160,7 @@ export default function Page({ params }: { params: { artist_id: string } }) {
                 setOpen(true)
             },200)
         } catch (e) {
+            /* @ts-ignore */
             if(e.response.status === 401) {
                 console.log('authenicator')
             }

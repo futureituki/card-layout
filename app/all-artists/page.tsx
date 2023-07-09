@@ -6,7 +6,6 @@ import Gsap from "gsap";
 import {Artists} from "@/constants/artists";
 export default function AllArtists() {
     const ref = useRef(null);
-    const ref_container = useRef(null);
     useEffect(() => {
         Gsap.fromTo('#container', {
             duration:2,
@@ -15,34 +14,41 @@ export default function AllArtists() {
             opacity:1,
         })
     },[])
-    const linkLeaveHandler = (e, image_id) => {
+    const linkLeaveHandler = (e:any, image_id:string) => {
         if(ref.current) {
+            /* @ts-ignore */
             const image = ref.current.querySelector(`#${image_id}`);
             Gsap.to(image, { autoAlpha: 0, duration: 0.4, zIndex:0 });
         }
     }
-    const linkEnterHandler = (e, image_id) => {
+    const linkEnterHandler = (e:any, image_id:string) => {
         if(ref.current) {
+            /* @ts-ignore */
             const image = ref.current.querySelector(`#${image_id}`);
+            /* @ts-ignore */
             let linkX = ref.current.getBoundingClientRect().left;
+            /* @ts-ignore */
             let linkY = ref.current.getBoundingClientRect().top;
             let cursorX = e.clientX - linkX;
             let cursorY = e.clientY - linkY;
-            let centerPoint = {};
+            let centerPoint:{x:number,y:number} = {x:0,y:0};
             centerPoint.x = cursorX - image.offsetWidth / 2;
             centerPoint.y = cursorY - image.offsetHeight / 2;
             Gsap.set(image, { translateX: centerPoint.x, translateY: centerPoint.y });
             Gsap.to(image, { autoAlpha: 1, duration: 0.2 });
         }
     }
-    const linkMoveHandler = (e, image_id) => {
+    const linkMoveHandler = (e:any, image_id:string) => {
         if(ref.current) {
+            /* @ts-ignore */
             const image = ref.current.querySelector(`#${image_id}`);
+            /* @ts-ignore */
             let linkX = ref.current.getBoundingClientRect().left + 50;
+            /* @ts-ignore */
             let linkY = ref.current.getBoundingClientRect().top + 50;
             let cursorX = e.clientX - linkX;
             let cursorY = e.clientY - linkY;
-            let centerPoint = {};
+            let centerPoint:{x:number,y:number} = {x:0,y:0};
             centerPoint.x = cursorX - image.offsetWidth / 2;
             centerPoint.y = cursorY - image.offsetHeight / 2;
             Gsap.to(image, {translateX: centerPoint.x, translateY: centerPoint.y, overwrite: false, duration:0.4});

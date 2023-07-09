@@ -2,7 +2,7 @@
 import './page.css'
 import Header from "@/components/shard/Navigation/Header";
 import {SlideAnimation} from "@/components/shard/Image/slide-animation";
-import {HTMLDivElement} from "react";
+import HTMLDivElement from "react";
 import Link from "next/link";
 import Gsap from "gsap";
 import {MouseEvent} from "react";
