@@ -2,6 +2,7 @@ import './globals.css'
 import { Inter } from 'next/font/google'
 import Header from "@/components/shard/Navigation/Header";
 import Footer from "@/components/shard/Footer/footer";
+import {LoopScrollView} from "@/components/shard/Parent/ScrollView";
 const inter = Inter({ subsets: ['latin'] })
 
 export const metadata = {
@@ -16,10 +17,12 @@ export default function RootLayout({
 }) {
   return (
     <html lang="ja">
-      <body>
-      <Header/>
-      {children}
-      </body>
+        <body>
+        <Header/>
+        <LoopScrollView>
+        {children}
+        </LoopScrollView>
+        </body>
     </html>
   )
 }

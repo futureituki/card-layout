@@ -2,7 +2,7 @@
 import './page.css'
 import Header from "@/components/shard/Navigation/Header";
 import {SlideAnimation} from "@/components/shard/Image/slide-animation";
-import HTMLDivElement from "react";
+import HTMLDivElement, {useEffect} from "react";
 import Link from "next/link";
 import Gsap from "gsap";
 import {MouseEvent} from "react";
@@ -10,6 +10,14 @@ import Image from "next/image";
 import {Artists} from "@/constants/artists";
 import {BesideSlideAnimation} from "@/components/shard/Image/beside-slide-animation";
 export default function Home() {
+    useEffect(() => {
+        Gsap.fromTo('#container', {
+            duration:2,
+            opacity:0,
+        }, {
+            opacity:1,
+        })
+    },[])
     const activeAnimation = (visual_id:string, font_id:string) => {
         Gsap.to(`#${visual_id}`, {
             opacity:1,

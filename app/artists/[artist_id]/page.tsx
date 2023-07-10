@@ -14,12 +14,12 @@ import {Artist} from "@/type/artists";
 import {getToken} from "@/utils/spotify_auth/auth";
 import {useRouter} from "next/navigation";
 import {useInView} from "react-intersection-observer";
+import InfiniteScroll  from "react-infinite-scroller"
+import {isEmpty} from "lodash";
 export default function Page({ params }: { params: { artist_id: string } }) {
     const ref = useRef<HTMLDivElement>();
-    const canvasRef = useRef<HTMLCanvasElement>()
     const router = useRouter()
     const { ref: inViewRef, inView } = useInView();
-    const [isPlaying, setIsPlaying] = useState(false)
     const setRefs = useCallback(
         (node:any) => {
             ref.current = node;
@@ -41,6 +41,10 @@ export default function Page({ params }: { params: { artist_id: string } }) {
     const [analyserNode, setAnalyserNode] = useState<any>()
     const [prevClassName, setPrevName] = useState<string>('')
     const [currentCanvas, setCurrentCanvas] = useState<HTMLCanvasElement>()
+    const [hasMore, setHasMore] = useState(false);  //再読み込み判定
+    const [discId, setDiscId] = useState('')
+    const [discImg, setDiscImg] = useState('')
+
     let id:number
     const artist = Artists.filter((artist) => artist.artist_id === params.artist_id)[0]
     useEffect(() => {
@@ -74,7 +78,7 @@ export default function Page({ params }: { params: { artist_id: string } }) {
             setAudioSourceNode(sourceNode);
 
             const analyser = audioContext.createAnalyser();
-            analyser.fftSize = 128;
+            analyser.fftSize = 512;
             setAnalyserNode(analyser);
 
             const gainNode = audioContext.createGain();
@@ -105,7 +109,7 @@ export default function Page({ params }: { params: { artist_id: string } }) {
                 })
                 setA(artist_res.data)
                 }
-                const albums_res = await axios.get(`https://api.spotify.com/v1/artists/${params.artist_id}/albums?limit=5`, {
+                const albums_res = await axios.get(`https://api.spotify.com/v1/artists/${params.artist_id}/albums?limit=6`, {
                     headers: {
                         'Authorization': `Bearer ${localStorage.getItem('token') as string}`
                     }
@@ -113,7 +117,7 @@ export default function Page({ params }: { params: { artist_id: string } }) {
                 const newArr = Array.from(new Set(albums_res.data.items))
                 setDisc(newArr as any)
                 setNextLink(albums_res.data.next === null ? '' : albums_res.data.next)
-                const related_res = await axios.get(`https://api.spotify.com/v1/artists/${params.artist_id}/related-artists?limit=6`, {
+                const related_res = await axios.get(`https://api.spotify.com/v1/artists/${params.artist_id}/related-artists`, {
                     headers: {
                         'Authorization': `Bearer ${localStorage.getItem('token') as string}`
                     }
@@ -145,11 +149,24 @@ export default function Page({ params }: { params: { artist_id: string } }) {
         setNextLink(res.data.items < 5 ? '' : res.data.next)
         setDisc(disc.concat(res.data.items))
     }
+    const loadMore = async() => {
+        const res = await axios.get(`https://api.spotify.com/v1/albums/${discId}/tracks?offset=${music?.length}`, {
+            headers: {
+                'Authorization': `Bearer ${localStorage.getItem('token') as string}`
+            }
+        })
+        if(isEmpty(res.data.items)) {
+            setHasMore(false)
+            return;
+        }
+        res.data.items.map((item:Music) => item['disc_img'] = discImg)
+        setMusic([...music!, ...res.data.items])
+    }
     // https://api.spotify.com/v1/albums/3LFKZgxC04M8uSRTc3QySo/tracks?limit=20
     const getDiscMusic = async(disc_id:string, disc_img:string) => {
         setOpen(false)
         try {
-            const res = await axios.get(`https://api.spotify.com/v1/albums/${disc_id}/tracks?limit=20`, {
+            const res = await axios.get(`https://api.spotify.com/v1/albums/${disc_id}/tracks`, {
                 headers: {
                     'Authorization': `Bearer ${localStorage.getItem('token') as string}`
                 }
@@ -159,6 +176,9 @@ export default function Page({ params }: { params: { artist_id: string } }) {
                 res.data.items.map((item:Music) => item['disc_img'] = disc_img)
                 setMusic(res.data.items)
                 setOpen(true)
+                setDiscId(disc_id)
+                setHasMore(true)
+                setDiscImg(disc_img)
             },200)
         } catch (e) {
             /* @ts-ignore */
@@ -167,6 +187,7 @@ export default function Page({ params }: { params: { artist_id: string } }) {
             }
         }
     }
+
     const HistoryScroll = () => {
         if(!historyRef.current) return
         const historys = historyRef.current.querySelectorAll('.parts__window')
@@ -240,25 +261,25 @@ export default function Page({ params }: { params: { artist_id: string } }) {
             if(prevClassName !== '') {
                 const canvas = document.querySelector(`.${prevClassName}`) as HTMLCanvasElement
                 const canvasContext = canvas.getContext('2d')!;
-                canvasContext.clearRect(0, 0, canvas.width, canvas.height);
+                canvasContext?.clearRect(0, 0, canvas?.width, canvas?.height);
             }
-            const canvas = document.querySelector(`.${className}`)! as HTMLCanvasElement
+            const canvas = document.querySelector(`.${className}`) as HTMLCanvasElement
             setCurrentCanvas(canvas)
             if(!canvas) {
                 window.cancelAnimationFrame(id)
             }
-            const canvasContext = canvas.getContext('2d')!;
+            const canvasContext = canvas?.getContext('2d')!;
 
             const dataArray = new Uint8Array(analyserNode.frequencyBinCount);
             analyserNode.getByteFrequencyData(dataArray);
-            canvasContext.clearRect(0, 0, canvas?.width, canvas?.height);
-            const barWidth = (canvas.width / dataArray.length) * 9.5;
+            canvasContext?.clearRect(0, 0, canvas?.width, canvas?.height);
+            const barWidth = (canvas?.width / dataArray.length) * 9.5;
             let posX = 0;
             dataArray.forEach((data) => {
-                const barHeight = (data / 255) * canvas.height - 80;
+                const barHeight = (data / 255) * canvas?.height - 80;
 
-                canvasContext.fillStyle = `rgb(255,255,255)`;
-                canvasContext.fillRect(posX, canvas.height - barHeight, barWidth, barHeight);
+                canvasContext ? canvasContext.fillStyle = `rgb(255,255,255)` : '';
+                canvasContext?.fillRect(posX, canvas?.height - barHeight, barWidth, barHeight);
 
                 posX += barWidth + 10;
             });
@@ -269,15 +290,6 @@ export default function Page({ params }: { params: { artist_id: string } }) {
     const playMusic = (src:string, className:string) => {
         if(src === null) return
         if(!audio) return
-        // if (audioSourceNode && gainNode) {
-        //     // オーディオノードの接続解除
-        //     audioSourceNode.disconnect();
-        //     gainNode.disconnect();
-        //
-        //     // 状態をリセット
-        //     setAudioSourceNode(null);
-        //     setGainNode(null);
-        // }
         if(audio.src === src) {
             audio.pause()
             audio.src = ''
@@ -291,6 +303,11 @@ export default function Page({ params }: { params: { artist_id: string } }) {
         audio?.pause()
         router.push(href)
     }
+    const handleClose = () => {
+        setOpen(false)
+        audio?.pause()
+    }
+    const loader =<div className="loader" key={0}>Loading ...</div>;
     return (
         <div id="container" className="artist_container">
             <div className="top_visual">
@@ -321,11 +338,11 @@ export default function Page({ params }: { params: { artist_id: string } }) {
                 {disc?.map((item:Disc, index:number) => (
                     artist ?
                     artist.name === '櫻坂46' || artist.name === '欅坂46' ?
-                    item.name.indexOf('(Special Edition)') !== -1 ?
+                    item.name.indexOf('(Special Edition)') !== -1 || item.name.indexOf('(Complete Edition)') ?
                         <div className="disc" key={index}>
                                 <Image role="button" onClick={() => getDiscMusic(item.id,item.images[0].url)} src={item.images[0].url} alt="" width={300} height={300} />
                             <div className="music__name">
-                                <span>{item.name.slice(0,item.name.indexOf('(Special Edition)'))}</span>
+                                <span>{item.name}</span>
                                 <span>{item.release_date}</span>
                             </div>
                         </div>
@@ -349,21 +366,28 @@ export default function Page({ params }: { params: { artist_id: string } }) {
             {nextLink === '' ? <div></div> : <div className="more__button">
                 <Button handle={nextDisc}>もっと見る</Button>
             </div>}
-            <div className="side__music__menu" style={open ? {right:'0%'} : {right:'-50%'}}>
-                <ul className="music__list">
-                    <p>曲</p>
-                    {music?.map((item, index) => (
-                        <li key={index} onClick={() => playMusic(item.preview_url, `canvas_${item.track_number}`)} style={item.preview_url === null ? {cursor:'auto'} : {cursor:'pointer'}}>
-                            <span>{item.track_number}</span>
-                            <div className="disc__icon">
-                                <span style={audio?.src === item.preview_url ? {display:'block'}: {display:'none'}}></span>
-                                {item.preview_url === null ? <div></div> : <canvas className={["play_canvas",`canvas_${item.track_number}`].join(' ')}/>}
-                                {item.preview_url === null ? <div></div> : <Image src={item.disc_img} alt={item.name} width={40} height={40} />}
-                            </div>
-                            {item.name}
-                        </li>
-                    ))}
-                </ul>
+            <div className="side__music__menu" style={open ? {right:'0%'} : undefined}>
+                    <InfiniteScroll
+                        loadMore={loadMore}    //項目を読み込む際に処理するコールバック関数
+                        hasMore={hasMore}      //読み込みを行うかどうかの判定
+                        loader={loader}
+                    >
+                        <ul className="music__list">
+                            <p>曲</p>
+                            <button className="close__button" onClick={handleClose}>×</button>
+                            {music?.map((item, index) => (
+                                <li key={index} onClick={() => playMusic(item.preview_url, `canvas_${index + 1}`)} style={item.preview_url === null ? {cursor:'auto'} : {cursor:'pointer'}}>
+                                    <span>{index + 1}</span>
+                                    <div className="disc__icon">
+                                        <span style={audio?.src === item.preview_url ? {display:'block'}: {display:'none'}}></span>
+                                        {item.preview_url === null ? <div></div> : <canvas className={["play_canvas",`canvas_${index + 1}`].join(' ')}/>}
+                                        {item.preview_url === null ? <div></div> : <Image src={item.disc_img} alt={item.name} width={60} height={60} />}
+                                    </div>
+                                    {item.name}
+                                </li>
+                            ))}
+                        </ul>
+                    </InfiniteScroll>
             </div>
             <Link href="/all-artists" className="infinite__scroll">
                 <div className="scroll__cover"></div>
@@ -385,23 +409,46 @@ export default function Page({ params }: { params: { artist_id: string } }) {
                     </div>
                 </div>
             </Link>
-            <div className="related_artists">
-                <ul>
-                    {relatedArtists.map((artist,index)=> (
-                        <li key={index}>
-                            <div role="button" onClick={() => goLink(`/artists/${artist.id}`)}>
-                                {artist.images[0] ? <Image loading="lazy" src={artist.images[0]?.url} alt="" width={300} height={300} /> : ''}
-                                <div className="related__artists__info">
-                                    <p className="related_artists__name" id="related__name">{artist.name}</p>
-                                    <p className="related__artists__genre">{artist.genres.map((genre,index) => (
-                                        <span key={index}>{genre}</span>
-                                    ))}</p>
-                                </div>
-                            </div>
-                        </li>
-                ))}
-                </ul>
-            </div>
+            <section className="infinite__scroll" style={{borderTop:"1px solid #000"}}>
+                <div className="scroll__cover__related"></div>
+                <div className="main__text">
+                    <h3>Related Artists</h3>
+                </div>
+                <div className="d-demo d-demo-related">
+                    <div className="d-demo__wrap">
+                        <ul className="d-demo__list d-demo__list--left">
+                            {relatedArtists.map((artist,index)=> (
+                                <li key={index} className="d-demo__item-related">
+                                    <div role="button" onClick={() => goLink(`/artists/${artist.id}`)}>
+                                        {artist.images[0] ? <Image loading="lazy" src={artist.images[0]?.url} alt="" width={300} height={300} /> : ''}
+                                        <div className="related__artists__info">
+                                            <p className="related_artists__name" id="related__name">{artist.name}</p>
+                                            <p className="related__artists__genre">{artist.genres.map((genre,index) => (
+                                                <span key={index}>{genre}</span>
+                                            ))}</p>
+                                        </div>
+                                    </div>
+                                </li>
+                            ))}
+                        </ul>
+                        <ul className="d-demo__list d-demo__list--left">
+                            {relatedArtists.map((artist,index)=> (
+                                <li key={index} className="d-demo__item-related">
+                                    <div role="button" onClick={() => goLink(`/artists/${artist.id}`)}>
+                                        {artist.images[0] ? <Image loading="lazy" src={artist.images[0]?.url} alt="" width={300} height={300} /> : ''}
+                                        <div className="related__artists__info">
+                                            <p className="related_artists__name" id="related__name">{artist.name}</p>
+                                            <p className="related__artists__genre">{artist.genres.map((genre,index) => (
+                                                <span key={index}>{genre}</span>
+                                            ))}</p>
+                                        </div>
+                                    </div>
+                                </li>
+                            ))}
+                        </ul>
+                    </div>
+                </div>
+            </section>
             <Footer />
         </div>
     )

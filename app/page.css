@@ -4,6 +4,9 @@
   overflow: hidden;
     transition: all 0.2s ease-out;
 }
+.main {
+    opacity: 0;
+}
 .window__scroll {
     position: absolute;
     width: 100vw;
