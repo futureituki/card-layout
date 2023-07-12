@@ -45,7 +45,7 @@ export default function Page({ params }: { params: { artist_id: string } }) {
     const [hasMore, setHasMore] = useState(false);  //再読み込み判定
     const [discId, setDiscId] = useState('')
     const [discImg, setDiscImg] = useState('')
-
+    const [playMusicSrc, setPlayMusicSrc] = useState('')
     let id:number
     const artist = Artists.filter((artist) => artist.artist_id === params.artist_id)[0]
     useEffect(() => {
@@ -379,8 +379,11 @@ export default function Page({ params }: { params: { artist_id: string } }) {
         if(audio.src === src) {
             audio.pause()
             audio.src = ''
+            setPlayMusicSrc('')
         } else {
             audio.src = src
+            audio.load()
+            setPlayMusicSrc(src)
             createVisualize(audio, className)
             audio.play()
             }
@@ -472,7 +475,7 @@ export default function Page({ params }: { params: { artist_id: string } }) {
                                     <div role="button" onClick={() => playMusic(item.preview_url, `canvas_${index + 1}`)}>
                                         <span>{index + 1}</span>
                                         <div className="disc__icon">
-                                            <span style={audio?.src === item.preview_url ? {display:'block'}: {display:'none'}}></span>
+                                            <span style={playMusicSrc === item.preview_url ? {display:'block'}: {display:'none'}}></span>
                                             {item.preview_url === null ? <div></div> : <canvas className={["play_canvas",`canvas_${index + 1}`].join(' ')}/>}
                                             {item.preview_url === null ? <div></div> : <Image src={item.disc_img} alt={item.name} width={60} height={60} />}
                                         </div>

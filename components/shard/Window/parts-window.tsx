@@ -5,7 +5,6 @@ interface Props {
     body:string
 }
 const PartsWindow:React.FC<Props> = ({ year,body }) => {
-    console.log(body)
     const texts = body.split(/(\n)/).map((item, index) => {
         return (
             <React.Fragment key={index}>
