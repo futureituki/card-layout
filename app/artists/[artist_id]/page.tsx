@@ -1,7 +1,7 @@
 'use client'
 import './page.css'
 import Image from "next/image";
-import {Artists} from "@/constants/artists";
+import {ArtistHistory, Artists} from "@/constants/artists";
 import Link from "next/link";
 import {useEffect, useState, useRef, useCallback} from "react";
 import Gsap from "gsap";
@@ -15,9 +15,10 @@ import {getToken} from "@/utils/spotify_auth/auth";
 import {useRouter} from "next/navigation";
 import {useInView} from "react-intersection-observer";
 import InfiniteScroll  from "react-infinite-scroller"
-import {isEmpty} from "lodash";
+import { TimelineItem } from '@/components/shard/TimeLineItem'
 export default function Page({ params }: { params: { artist_id: string } }) {
     const ref = useRef<HTMLDivElement>();
+    const mouseRef = useRef<HTMLDivElement>(null)
     const router = useRouter()
     const { ref: inViewRef, inView } = useInView();
     const setRefs = useCallback(
@@ -57,16 +58,20 @@ export default function Page({ params }: { params: { artist_id: string } }) {
             test()
         }
     },[])
-    const [state, setState] = useState('');
+    useEffect(() => {
+        window.addEventListener('load', () => audio?.pause());
+        return () => {
+            window.removeEventListener('load', () => audio?.pause());
+        };
+},[])
     useEffect(() => {
         setAudio(new Audio())
-        audio?.setAttribute('playsInline', 'true');
         const context = new AudioContext();
         setAudioContext(context);
         return () => {
-            // コンポーネントのアンマウント時にオーディオコンテキストを解放
             audio?.pause()
             context.close();
+            // コンポーネントのアンマウント時にオーディオコンテキストを解放
                 const canvasContext = currentCanvas?.getContext('2d');
                 canvasContext?.clearRect(0, 0, currentCanvas?.width as number, currentCanvas?.height as number);
             window.cancelAnimationFrame(id)
@@ -76,7 +81,6 @@ export default function Page({ params }: { params: { artist_id: string } }) {
         if (audioContext) {
             const sourceNode = audioContext.createMediaElementSource(audio);
             setAudioSourceNode(sourceNode);
-
             const analyser = audioContext.createAnalyser();
             analyser.fftSize = 512;
             setAnalyserNode(analyser);
@@ -109,7 +113,7 @@ export default function Page({ params }: { params: { artist_id: string } }) {
                 })
                 setA(artist_res.data)
                 }
-                const albums_res = await axios.get(`https://api.spotify.com/v1/artists/${params.artist_id}/albums?limit=6`, {
+                const albums_res = await axios.get(`https://api.spotify.com/v1/artists/${params.artist_id}/albums`, {
                     headers: {
                         'Authorization': `Bearer ${localStorage.getItem('token') as string}`
                     }
@@ -132,6 +136,7 @@ export default function Page({ params }: { params: { artist_id: string } }) {
                             localStorage.setItem('token', token)
                         }
                         await test()
+                    console.log('aa')
                         console.log(e)
                         getInfo()
                 }
@@ -155,7 +160,7 @@ export default function Page({ params }: { params: { artist_id: string } }) {
                 'Authorization': `Bearer ${localStorage.getItem('token') as string}`
             }
         })
-        if(isEmpty(res.data.items)) {
+        if(res.data.items.length < 1) {
             setHasMore(false)
             return;
         }
@@ -179,80 +184,156 @@ export default function Page({ params }: { params: { artist_id: string } }) {
                 setDiscId(disc_id)
                 setHasMore(true)
                 setDiscImg(disc_img)
-            },200)
+            },150)
         } catch (e) {
             /* @ts-ignore */
             if(e.response.status === 401) {
                 console.log('authenicator')
+                const test = async() => {
+                    // if(localStorage.getItem('token')) return
+                    const token = await getToken()
+                    localStorage.setItem('token', token)
+                }
+                test()
             }
         }
     }
+//     const mouseLeaveHandler = (e:any) => {
+//         console.log('tt')
+//         if(mouseRef.current) {
+//                 /* @ts-ignore */
+//                 Gsap.to(`.${mouseRef.current.className}`, { autoAlpha: 0, duration: 0.4, zIndex:0 });
+//         }
+//     }
+//     const mouseMoveHandler = (e:any, id:string) => {
+//         console.log('aa')
+//         if(mouseRef.current) {
+//             /* @ts-ignore */
+//             /* @ts-ignore */
+//             const image = document.querySelector('.disc_' + `${id}`)!
+//             console.log(image)
+//             let linkX = image.getBoundingClientRect().left + 50;
+//             /* @ts-ignore */
+//             let linkY = image.getBoundingClientRect().top + 50;
+//             console.log(linkX, linkY)
+//             let cursorX = e.clientX;
+//             let cursorY = e.clientY;
+//             let centerPoint:{x:number,y:number} = {x:0,y:0};
+//             centerPoint.x = cursorX
+//             centerPoint.y = cursorY
+//             Gsap.to(`.${mouseRef.current.className}`, {translateX: centerPoint.x, translateY: centerPoint.y, overwrite: false, duration:0.4});
+//         }
+//     }
+//     const mouseEnterHandler = (e:MouseEvent, id:string) => {
+// //イベントオブジェクトを参照し、カーソル位置情報を取得
+//         if(mouseRef.current) {
+//             // const mousePosX = e.clientX;
+//             // const mousePosY = e.clientY;
+//             // const mouseWidth = mouseRef.current.clientWidth;
+//             // const cssPosAjust = mouseWidth / 2;
+//             // const x = mousePosX - cssPosAjust;
+//             // const y = mousePosY;
+//             /* @ts-ignore */
+//             const image = document.querySelector('.disc_'+`${id}`)!
+//             console.log(image)
+//             let linkX = image.getBoundingClientRect().left;
+//             /* @ts-ignore */
+//             let linkY = image.getBoundingClientRect().top;
+//             console.log(linkX, linkY)
+//             let cursorX = e.clientX;
+//             let cursorY = e.clientY;
+//             console.log(cursorX, cursorY)
+//             let centerPoint:{x:number,y:number} = {x:0,y:0};
+//             centerPoint.x = cursorX
+//             centerPoint.y = cursorY
+//             Gsap.set(`.${mouseRef.current.className}`, { translateX: centerPoint.x, translateY: centerPoint.y });
+//             Gsap.to(`.${mouseRef.current.className}`, { autoAlpha: 1, duration: 0.2 });
+// //カーソルの位置情報を「mouseStalker」に反映
+// //             Gsap.to(`.${mouseRef.current.className}`, {
+// //                 left:e.clientX,
+// //                 top:e.clientY,
+// //                 opacity:1,
+// //                 duration:1,
+// //             })
+//         }
+//     }
+    const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
 
-    const HistoryScroll = () => {
-        if(!historyRef.current) return
-        const historys = historyRef.current.querySelectorAll('.parts__window')
-        const firstHistory = historys[0]
-        const secondHistory = historys[1]
-        const thirdHistory = historys[2]
-        if(firstHistory.getBoundingClientRect().top < 350) {
-            Gsap.fromTo(firstHistory, {
-                duration:.1,
-                translateY:0,
-            }, {
-                duration:.1,
-                translateY:firstHistory.getBoundingClientRect().top,
-            })
-            // Gsap.to(firstHistory, {
-            //     duration:.1,
-            //     translateY:firstHistory.getBoundingClientRect().top,
-            // })
-            }
-        if(secondHistory.getBoundingClientRect().top < 350) {
-            Gsap.to(secondHistory, {
-                duration:.1,
-                // translateY:window.scrollY - secondHistory.getBoundingClientRect().top,
-            })
-            if(thirdHistory.getBoundingClientRect().top < 350) {
-                Gsap.to(thirdHistory, {
-                    duration:.1,
-                    // translateY:window.scrollY - thirdHistory.getBoundingClientRect().top,
-                })
-            }
+    const mouseEnterHandler = (e:any) => {
+        // マウスストーカーの表示処理
+        if(mouseRef.current) {
+            // mouseRef.current.style.background = 'black';
         }
-        // if(firstHistory.pageY > 800) {
-        //     console.log('test')
-        // }
+    };
 
-             // const history = ref.current
-        //     // history.scrollLeft = history.scrollWidth
-        // }
-    }
-    useEffect(() => {
-        if (historyRef.current) {
-            HistoryScroll();
-            window.addEventListener("scroll", HistoryScroll);
+    const mouseLeaveHandler = () => {
+        // マウスストーカーの非表示処理
+        if(mouseRef.current) {
+            Gsap.to(`.${mouseRef.current.className}`, {
+                opacity:0,
+            })        }
+    };
 
-            // アンマウント時にイベントリスナーを解除
+    const mouseMoveHandler = (e:any) => {
+        // マウスストーカーの位置更新処理
+        if(mouseRef.current) {
+            const {clientX, clientY} = e;
+            setMousePosition({x: clientX, y: clientY});
+            Gsap.to(`.${mouseRef.current.className}`, {
+                opacity:1,
+                left:clientX - 10,
+                top:clientY - 10
+            })
         }
-        // マウント時にも実行
-    }, []);
-    const test = [
-        {body:"ワーナーミュージック・ジャパン　初音ミクシンフォニー 2018 SD イラスト\n" +
-                "ナナヲアカリ 「フライングベスト~知らないの?巷で噂のダメ天使~」ステッカーイラスト\n" +
-                "株式会社 DeNA　TORIKAGO_ILLUSTRATORS 『サクヤの描く最高の自分』\n" +
-                "pixiv株式会社　pixivPAY 公式アカウントアイコンイラスト\n" +
-                "株式会社セブンコード 「社畜る~ず - ロボ開発編 -」ポスターイラスト", year:"2018"},
-        {body:"ワーナーミュージック・ジャパン　初音ミクシンフォニー 2018 SD イラスト\n" +
-                "ナナヲアカリ 「フライングベスト~知らないの?巷で噂のダメ天使~」ステッカーイラスト\n" +
-                "株式会社 DeNA　TORIKAGO_ILLUSTRATORS 『サクヤの描く最高の自分』\n" +
-                "pixiv株式会社　pixivPAY 公式アカウントアイコンイラスト\n" +
-                "株式会社セブンコード 「社畜る~ず - ロボ開発編 -」ポスターイラスト", year:"2018"},
-        {body:"ワーナーミュージック・ジャパン　初音ミクシンフォニー 2018 SD イラスト\n" +
-                "ナナヲアカリ 「フライングベスト~知らないの?巷で噂のダメ天使~」ステッカーイラスト\n" +
-                "株式会社 DeNA　TORIKAGO_ILLUSTRATORS 『サクヤの描く最高の自分』\n" +
-                "pixiv株式会社　pixivPAY 公式アカウントアイコンイラスト\n" +
-                "株式会社セブンコード 「社畜る~ず - ロボ開発編 -」ポスターイラスト", year:"2018"},
-    ]
+    };
+    // const HistoryScroll = () => {
+    //     if(!historyRef.current) return
+    //     const historys = historyRef.current.querySelectorAll('.parts__window')
+    //     const firstHistory = historys[0]
+    //     const secondHistory = historys[1]
+    //     const thirdHistory = historys[2]
+    //     if(firstHistory.getBoundingClientRect().top < 350) {
+    //         Gsap.fromTo(firstHistory, {
+    //             duration:.1,
+    //             translateY:0,
+    //         }, {
+    //             duration:.1,
+    //             translateY:firstHistory.getBoundingClientRect().top,
+    //         })
+    //         // Gsap.to(firstHistory, {
+    //         //     duration:.1,
+    //         //     translateY:firstHistory.getBoundingClientRect().top,
+    //         // })
+    //         }
+    //     if(secondHistory.getBoundingClientRect().top < 350) {
+    //         Gsap.to(secondHistory, {
+    //             duration:.1,
+    //             // translateY:window.scrollY - secondHistory.getBoundingClientRect().top,
+    //         })
+    //         if(thirdHistory.getBoundingClientRect().top < 350) {
+    //             Gsap.to(thirdHistory, {
+    //                 duration:.1,
+    //                 // translateY:window.scrollY - thirdHistory.getBoundingClientRect().top,
+    //             })
+    //         }
+    //     }
+    //     // if(firstHistory.pageY > 800) {
+    //     //     console.log('test')
+    //     // }
+    //
+    //          // const history = ref.current
+    //     //     // history.scrollLeft = history.scrollWidth
+    //     // }
+    // }
+    // useEffect(() => {
+    //     if (historyRef.current) {
+    //         HistoryScroll();
+    //         window.addEventListener("scroll", HistoryScroll);
+    //
+    //         // アンマウント時にイベントリスナーを解除
+    //     }
+    //     // マウント時にも実行
+    // }, []);
     const createVisualize = (audioElement:HTMLAudioElement, className:string) => {
         audioElement.crossOrigin = "anonymous";
         setPrevName(className)
@@ -326,46 +407,44 @@ export default function Page({ params }: { params: { artist_id: string } }) {
                         </div>
                     </>}
             </div>
-            {/*<div className="history" ref={historyRef}>*/}
-            {/*    {test.map((item, index) => (*/}
-            {/*        <PartsWindow key={index} body={item.body} year={item.year}/>*/}
-            {/*    ))}*/}
-            {/*</div>*/}
             <div className="disc__name">
+                <h2>Career</h2>
+            </div>
+            {artist ?
+                <>
+                    <div className="sp__timeline">
+                        {ArtistHistory.get(artist.name)?.map((data, idx) => (
+                            <PartsWindow key={idx} year={data.year} body={data.text}/>
+                        ))}
+                    </div>
+                    <div className="timeline-container">
+                        {ArtistHistory.get(artist.name)?.map((data, idx) => (
+                            <TimelineItem key={idx * 2} year={data.year} text={data.text}/>
+                        ))}
+                    </div>
+                </>
+                : <></>
+            }
+            <section className="disc__section">
+                <div className="disc__name">
                 <h2>Discography</h2>
             </div>
             <div className="disc__list">
                 {disc?.map((item:Disc, index:number) => (
-                    artist ?
-                    artist.name === '櫻坂46' || artist.name === '欅坂46' ?
-                    item.name.indexOf('(Special Edition)') !== -1 || item.name.indexOf('(Complete Edition)') ?
                         <div className="disc" key={index}>
-                                <Image role="button" onClick={() => getDiscMusic(item.id,item.images[0].url)} src={item.images[0].url} alt="" width={300} height={300} />
-                            <div className="music__name">
-                                <span>{item.name}</span>
-                                <span>{item.release_date}</span>
-                            </div>
-                        </div>
-                            : '' :
-                        <div className="disc" key={index}>
-                            <Image role="button" onClick={() => getDiscMusic(item.id,item.images[0].url)} src={item.images[0].url} alt="" width={300} height={300} />
-                            <div className="music__name">
-                                <span>{item.name}</span>
-                                <span>{item.release_date}</span>
-                            </div>
-                        </div>
-                        :   <div className="disc" key={index}>
-                            <Image role="button" onClick={() => getDiscMusic(item.id,item.images[0].url)} src={item.images[0].url} alt="" width={300} height={300} />
+                                <Image role="button" className={`disc_${item.id}`} onClick={() => getDiscMusic(item.id,item.images[0].url)} src={item.images[0].url} alt="" width={300} height={300} onMouseEnter={(e) => mouseEnterHandler(e)} onMouseLeave={() => mouseLeaveHandler()} onMouseMove={(e) => mouseMoveHandler(e)}/>
                             <div className="music__name">
                                 <span>{item.name}</span>
                                 <span>{item.release_date}</span>
                             </div>
                         </div>
                 ))}
+                <div className="mousestorker__view" ref={mouseRef}></div>
             </div>
             {nextLink === '' ? <div></div> : <div className="more__button">
                 <Button handle={nextDisc}>もっと見る</Button>
             </div>}
+            </section>
             <div className="side__music__menu" style={open ? {right:'0%'} : undefined}>
                     <InfiniteScroll
                         loadMore={loadMore}    //項目を読み込む際に処理するコールバック関数
@@ -376,14 +455,19 @@ export default function Page({ params }: { params: { artist_id: string } }) {
                             <p>曲</p>
                             <button className="close__button" onClick={handleClose}>×</button>
                             {music?.map((item, index) => (
-                                <li key={index} onClick={() => playMusic(item.preview_url, `canvas_${index + 1}`)} style={item.preview_url === null ? {cursor:'auto'} : {cursor:'pointer'}}>
-                                    <span>{index + 1}</span>
-                                    <div className="disc__icon">
-                                        <span style={audio?.src === item.preview_url ? {display:'block'}: {display:'none'}}></span>
-                                        {item.preview_url === null ? <div></div> : <canvas className={["play_canvas",`canvas_${index + 1}`].join(' ')}/>}
-                                        {item.preview_url === null ? <div></div> : <Image src={item.disc_img} alt={item.name} width={60} height={60} />}
+                                <li key={index} style={item.preview_url === null ? {cursor:'auto'} : {cursor:'pointer'}}>
+                                    <div role="button" onClick={() => playMusic(item.preview_url, `canvas_${index + 1}`)}>
+                                        <span>{index + 1}</span>
+                                        <div className="disc__icon">
+                                            <span style={audio?.src === item.preview_url ? {display:'block'}: {display:'none'}}></span>
+                                            {item.preview_url === null ? <div></div> : <canvas className={["play_canvas",`canvas_${index + 1}`].join(' ')}/>}
+                                            {item.preview_url === null ? <div></div> : <Image src={item.disc_img} alt={item.name} width={60} height={60} />}
+                                        </div>
+                                        {item.name}
                                     </div>
-                                    {item.name}
+                                    <Link href={item.external_urls.spotify} className="music__link" target={"_blank"}>
+                                        <Image src="/link.png" className="spotify__link" alt={`${item.name}のリンク`} width={10} height={10}/>
+                                    </Link>
                                 </li>
                             ))}
                         </ul>
@@ -415,7 +499,7 @@ export default function Page({ params }: { params: { artist_id: string } }) {
                     <h3>Related Artists</h3>
                 </div>
                 <div className="d-demo d-demo-related">
-                    <div className="d-demo__wrap">
+                    <div className="d-demo__wrap-related">
                         <ul className="d-demo__list d-demo__list--left">
                             {relatedArtists.map((artist,index)=> (
                                 <li key={index} className="d-demo__item-related">

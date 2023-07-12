@@ -31,6 +31,12 @@
     z-index: 3;
     cursor: pointer;
 }
+.artist__area:hover .artist__info,.artist__info p {
+    margin-right: 0;
+}
+.artist__area:hover .artist__info p {
+    margin-right: 0;
+}
 .artist__area__name {
     font-size: 32rem;
     color: #fff;
@@ -38,7 +44,9 @@
 }
 .artist__info {
     display: flex;
-    gap: 20rem;
+    --gap: -20rem;
+    transition: all .5s ease;
+    margin-right: calc(var(--gap)*-1);
 }
 .artist__info p {
     display: flex;
@@ -47,8 +55,14 @@
     color: #fff;
     border: 1px solid #828282;
     background: #343434;
+    margin-right: -32rem;
     padding: 6rem 30rem;
     border-radius: 2.5em;
+    transition: all .5s ease;
+    position: relative;
+}
+.artist__info p:nth-child(1) {
+    z-index: 2;
 }
 .artists__image {
     width: 500rem;

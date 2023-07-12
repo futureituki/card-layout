@@ -43,3 +43,31 @@
     margin:0  0  24rem 0;
     font-size: 20rem;
 }
+@media (max-width: 750px) {
+    .parts__window__header__button {
+        gap: 6rem;
+    }
+    .parts__window__header__button__red, .parts__window__header__button__yellow, .parts__window__header__button__green {
+        width: 8rem;
+        height: 8rem;
+    }
+    .parts__window__header {
+        height: 30rem;
+    }
+    .parts__window {
+        max-width: 300rem;
+        width: 90%;
+        maring:0 auto;
+    }
+    .parts__window__body {
+        margin:20rem;
+    }
+    .parts__window__body__year {
+        margin:0 0 12rem 0;
+        font-size: 12rem;
+    }
+    .parts__window__text {
+        line-height: 2;
+        font-size: .8rem;
+    }
+}

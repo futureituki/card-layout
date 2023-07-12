@@ -75,8 +75,12 @@
 cursor: pointer;
 }
 @media (min-width: 768px) {
+    .header_style {
+        height: 110px;
+    }
     .header_pc_area {
         display: flex;
+        font-size:20rem;
     }
     .header_sp_area {
         display: none;

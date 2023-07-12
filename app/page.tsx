@@ -88,7 +88,7 @@ export default function Home() {
                     <div className="window__sp__scroll__work">
                         {Artists.map((artist,index) => (
                             <Link href={`/artists/${artist.artist_id}`} key={index}>
-                                <div>
+                                <div style={{cursor:"pointer"}}>
                                     <BesideSlideAnimation ms={index*0.1 * 1000} alt={artist.name} src={artist.image_link} id={artist.id + 'beside'}/>
                                 </div>
                             </Link>

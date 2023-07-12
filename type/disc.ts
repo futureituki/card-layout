@@ -11,6 +11,9 @@ export interface Disc {
             release_date:string
 }
 export interface Music {
+    external_urls: {
+        spotify:string
+    }
     disc_img:string
     name:string
     preview_url:string

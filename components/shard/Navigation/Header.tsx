@@ -16,7 +16,7 @@ const Header:FC<Props> = ({ textWhite = false }) => {
                 </Link>
             </div>
             <div className="header_pc_area">
-                <Link href="/">
+                <Link href="/" id="main_title" style={textWhite ? {color:"white"} : {color:"black"}}>
                     MyFavorite Artist-Site
                 </Link>
                 <ul className="ul_style">

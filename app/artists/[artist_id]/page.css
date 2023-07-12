@@ -17,7 +17,11 @@
     width: 100vw;
     padding:0 var(--margin-2);
 }
+.disc__section {
+    margin:20rem 0;
+}
 .disc__list {
+    position: relative;
     display: flex;
     flex-direction: column;
     flex-wrap:wrap;
@@ -29,6 +33,7 @@
     flex-direction:column;
     gap:10rem;
     width: 40vw;
+    position: relative;
 }
 .disc:nth-child(odd) {
     transform: rotate(3deg)
@@ -37,11 +42,11 @@
     transform: rotate(-3deg)
 }
 .disc img {
-    cursor: pointer;
     width: 100%;
     height: 100%;
     object-fit: contain;
     object-position: center;
+    cursor: pointer;
 }
 .music__name {
     display: flex;
@@ -135,7 +140,7 @@ IE11対策
 }
 /*----------------------------*/
 .d-demo-related {
-    height: 100%;
+    height: 320rem;
 }
 .d-demo__wrap {
     display: flex;
@@ -143,7 +148,12 @@ IE11対策
     gap:30rem;
     transform: rotate(5deg);
 }
-
+.d-demo__wrap-related {
+    display: flex;
+    overflow: hidden;
+    gap:30rem;
+    transform: rotate(5deg);
+}
 .d-demo__list {
     display: flex;
     list-style: none;
@@ -234,7 +244,8 @@ IE11対策
 }
 .related__artists__genre {
     display:flex;
-    gap:10rem;
+    flex-wrap: wrap;
+    gap:6rem;
     margin:10rem 0;
 }
 .related_artists__name{
@@ -290,10 +301,16 @@ IE11対策
 .music__list li {
     display: flex;
     align-items: center;
-    gap:20rem;
+    gap:30rem;
     cursor: pointer;
     position: relative;
     width: fit-content;
+    line-height: 1.5;
+}
+.music__list li > div {
+    display: flex;
+    align-items: center;
+    gap:20rem;
 }
 .music__list span {
     display: block;
@@ -354,8 +371,55 @@ IE11対策
     z-index: 99;
     font-size: 30rem;
 }
-
+.music__link img{
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.mousestorker__view {
+    opacity: 0;
+    position: fixed;
+    top: -50px;
+    left: -50px;
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    border:1px solid #fff;
+    backdrop-filter: blur(5px);
+    transition-timing-function: ease-out;
+    z-index: 10;
+    pointer-events: none;
+}
+.mousestorker__view::before {
+    content: 'View';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform:translate(-50%,-50%);
+    color: #fff;
+    font-size: 16rem;
+    letter-spacing: 3rem;
+    font-weight: 400;
+    mix-blend-mode: difference;
+}
+@media (min-width: 751px) {
+    .spotify__link {
+        width: 14rem;
+        height: 14rem;
+        object-fit: cover;
+    }
+    .sp__timeline {
+        display: none;
+    }
+}
 @media (max-width:750px) {
+    .sp__timeline {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap:30rem;
+    }
     .close__button {
         top:-3%;
         font-size: 20rem;
@@ -378,7 +442,7 @@ IE11対策
         height: 100%;
     }
     .artists__name {
-        padding: 20rem var(--margin-1);
+        padding: 30rem 10rem;
     }
     .artists__name h2 {
         font-size:20rem;
@@ -405,11 +469,24 @@ IE11対策
     .d-demo__item {
         width: calc(100vw / 2);
     }
+    .d-demo__item-related {
+        width: calc(100vw / 2);
+    }
     .side__music__menu .music__list {
         padding: 0 20rem;
     }
+    .mousestorker__view::before {
+        font-size: 8rem;
+        letter-spacing: 1rem;
+    }
+    .music__list li > div {
+        gap:10rem;
+    }
+    .music__list li > div > span {
+        width: 12rem;
+    }
 }
-@media (max-width: 500px) {
+@media (max-width: 550px) {
     .side__music__menu {
         width: 100vw;
         right: -100%;

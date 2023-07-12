@@ -172,8 +172,8 @@ a {
     .keyakizaka46 {
         width: 70%;
         height:70%;
-        --x-num: -300rem;
-        --y-num: -1700rem;
+        --x-num: -350rem;
+        --y-num: -1650rem;
         transform: translate(var(--x-num), var(--y-num));
     }
     .eve {

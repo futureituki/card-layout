@@ -29,11 +29,11 @@ const wheelTimerDilay = 150;
 export function LoopScrollView({
   children,
   canScroll = true,
-  progress = 0,
+  progress = 10,
   onChangeProgress = () => {},
   onChangeScrollState = () => {},
   maxDiffYListLength = 2,
-  scrollRatio = 16,
+  scrollRatio = -10,
   inertialForceRatio = .1
 }: {
   children?: ReactNode;

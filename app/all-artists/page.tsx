@@ -7,12 +7,26 @@ import {Artists} from "@/constants/artists";
 export default function AllArtists() {
     const ref = useRef(null);
     useEffect(() => {
+        Gsap.to('#link', {
+            color:'white'
+        })
+        Gsap.to('#main_title', {
+            color:'white'
+        })
         Gsap.fromTo('#container', {
             duration:2,
             opacity:0,
         }, {
             opacity:1,
         })
+        return () => {
+            Gsap.to('#link', {
+                color:'black'
+            })
+            Gsap.to('#main_title', {
+                color:"black"
+            })
+        }
     },[])
     const linkLeaveHandler = (e:any, image_id:string) => {
         if(ref.current) {
