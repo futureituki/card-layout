@@ -391,6 +391,18 @@ IE11対策
     z-index: 10;
     pointer-events: none;
 }
+.img_load {
+    animation-duration: 2s;
+    animation-fill-mode: forwards;
+    animation-iteration-count: infinite;
+    animation-name: placeHolderShimmer;
+    animation-timing-function: linear;
+    background-color: #f6f7f8;
+    background: linear-gradient(to right, #eeeeee 8%, #bbbbbb 18%, #eeeeee 33%);
+    background-size: 800px 104px;
+    height: 100%;
+    position: relative;
+}
 .mousestorker__view::before {
     content: 'View';
     position: absolute;

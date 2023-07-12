@@ -53,7 +53,7 @@ export default function Home() {
             color:"#000",
         })
         Gsap.fromTo(`#${font_id}`, {
-            y:0,
+            y:20,
             opacity:1,
         }, {
             y:-40,

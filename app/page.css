@@ -120,7 +120,7 @@ a {
         transform: translate(-50%, -50%);
         position: absolute;
         overflow: hidden;
-        font-size: 40rem;
+        font-size: 40px;
         letter-spacing: 8rem;
         transition: all 0.5s;
         z-index: 5;

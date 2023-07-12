@@ -406,7 +406,12 @@ export default function Page({ params }: { params: { artist_id: string } }) {
                         </div>
                     </>
                     :  <>
-                        <Image src={a?.images[0].url ? a?.images[0].url : ''} alt="" width={500} height={500} />
+                        <Image id={a?.id} className="img_load" src={a?.images[0].url ? a?.images[0].url : ''} alt="" width={500} height={500}
+                               unoptimized
+                               onLoadingComplete={() => {
+                            let imageElement = document.getElementById(`#${a?.id}`)
+                            imageElement?.classList.remove('img_load')
+                        }}/>
                         <div className="artists__name">
                             <h2>{a?.name}</h2>
                         </div>
