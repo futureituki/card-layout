@@ -391,7 +391,16 @@ IE11対策
     z-index: 10;
     pointer-events: none;
 }
+.top_visual > .artist__image__f > img {
+    width: 30vw;
+    padding: 0;
+}
+.artist__image__f {
+    display: flex;
+    justify-content: center;
+}
 .img_load {
+    object-fit: cover;
     animation-duration: 2s;
     animation-fill-mode: forwards;
     animation-iteration-count: infinite;

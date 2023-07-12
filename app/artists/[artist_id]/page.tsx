@@ -406,22 +406,25 @@ export default function Page({ params }: { params: { artist_id: string } }) {
                         </div>
                     </>
                     :  <>
-                        <Image id={a?.id} className="img_load" src={a?.images[0].url ? a?.images[0].url : ''} alt="" width={500} height={500}
-                               unoptimized
-                               onLoadingComplete={() => {
-                            let imageElement = document.getElementById(`#${a?.id}`)
-                            imageElement?.classList.remove('img_load')
-                        }}/>
+                        <div className="artist__image__f">
+                            <Image id={a?.id} className="img_load" src={a?.images[0].url ? a?.images[0].url : ''} alt="" width={500} height={500}
+                                   unoptimized
+                                   onLoadingComplete={() => {
+                                       let imageElement = document.getElementById(`#${a?.id}`)
+                                       imageElement?.classList.remove('img_load')
+                                   }}/>
+                        </div>
+
                         <div className="artists__name">
                             <h2>{a?.name}</h2>
                         </div>
                     </>}
             </div>
-            <div className="disc__name">
-                <h2>Career</h2>
-            </div>
             {artist ?
                 <>
+                <div className="disc__name">
+                <h2>Career</h2>
+            </div>
                     <div className="sp__timeline">
                         {ArtistHistory.get(artist.name)?.map((data, idx) => (
                             <PartsWindow key={idx} year={data.year} body={data.text}/>
@@ -432,7 +435,7 @@ export default function Page({ params }: { params: { artist_id: string } }) {
                             <TimelineItem key={idx * 2} year={data.year} text={data.text}/>
                         ))}
                     </div>
-                </>
+    </>
                 : <></>
             }
             <section className="disc__section">
@@ -503,53 +506,54 @@ export default function Page({ params }: { params: { artist_id: string } }) {
                     </div>
                 </div>
             </Link>
-            <section className="infinite__scroll" style={{borderTop:"1px solid #000"}}>
-                <div className="scroll__cover__related"></div>
-                <div className="main__text">
-                    <h3>Related Artists</h3>
-                </div>
-                <div className="d-demo d-demo-related">
-                    <div className="d-demo__wrap-related">
-                        <ul className="d-demo__list d-demo__list--left">
-                            {relatedArtists.map((artist,index)=> (
-                                <li key={index} className="d-demo__item-related">
-                                    <div role="button" onClick={() => goLink(`/artists/${artist.id}`)}>
-                                        {artist.images[0] ? <Image loading="lazy" src={artist.images[0]?.url} alt="" width={300} height={300} /> : ''}
-                                        <div className="related__artists__info">
-                                            <p className="related_artists__name" id="related__name">{artist.name}</p>
-                                            <p className="related__artists__genre">{artist.genres.map((genre,index) => (
-                                                <span key={index}>{genre}</span>
-                                            ))}</p>
-                                        </div>
-                                    </div>
-                                </li>
-                            ))}
-                        </ul>
-                        <ul className="d-demo__list d-demo__list--left">
-                            {
-                                relatedArtists ?
-                            relatedArtists.map((artist,index)=> (
-                                <li key={index} className="d-demo__item-related">
-                                    <div role="button" onClick={() => goLink(`/artists/${artist.id}`)}>
-                                        {artist.images[0] ? <Image id={artist.name} loading="lazy" src={artist.images[0]?.url} alt="" width={300} height={300}
-                                                                   onLoadingComplete={() => {
-                                            let relate_imageElement = document.getElementById(`#${artist.name}`)
-                                                                       relate_imageElement?.classList.remove('img_load')}}/> : ''}
-                                        <div className="related__artists__info">
-                                            <p className="related_artists__name" id="related__name">{artist.name}</p>
-                                            <p className="related__artists__genre">{artist.genres.map((genre,index) => (
-                                                <span key={index}>{genre}</span>
-                                            ))}</p>
-                                        </div>
-                                    </div>
-                                </li>
-                            ))
-                                    : <></>
-                            }
-                        </ul>
-                    </div>
-                </div>
-            </section>
+            {
+                relatedArtists ?
+                    <section className="infinite__scroll" style={{borderTop:"1px solid #000"}}>
+                        <div className="scroll__cover__related"></div>
+                        <div className="main__text">
+                            <h3>Related Artists</h3>
+                        </div>
+                        <div className="d-demo d-demo-related">
+                            <div className="d-demo__wrap-related">
+                                <ul className="d-demo__list d-demo__list--left">
+                                    {relatedArtists.map((artist,index)=> (
+                                        <li key={index} className="d-demo__item-related">
+                                            <div role="button" onClick={() => goLink(`/artists/${artist.id}`)}>
+                                                {artist.images[0] ? <Image loading="lazy" src={artist.images[0]?.url} alt="" width={300} height={300} /> : ''}
+                                                <div className="related__artists__info">
+                                                    <p className="related_artists__name" id="related__name">{artist.name}</p>
+                                                    <p className="related__artists__genre">{artist.genres.map((genre,index) => (
+                                                        <span key={index}>{genre}</span>
+                                                    ))}</p>
+                                                </div>
+                                            </div>
+                                        </li>
+                                    ))}
+                                </ul>
+                                <ul className="d-demo__list d-demo__list--left">
+                                    {relatedArtists.map((artist,index)=> (
+                                        <li key={index} className="d-demo__item-related">
+                                            <div role="button" onClick={() => goLink(`/artists/${artist.id}`)}>
+                                                {artist.images[0] ? <Image id={artist.name} loading="lazy" src={artist.images[0]?.url} alt="" width={300} height={300}
+                                                                           onLoadingComplete={() => {
+                                                                               let relate_imageElement = document.getElementById(`#${artist.name}`)
+                                                                               relate_imageElement?.classList.remove('img_load')}}/> : ''}
+                                                <div className="related__artists__info">
+                                                    <p className="related_artists__name" id="related__name">{artist.name}</p>
+                                                    <p className="related__artists__genre">{artist.genres.map((genre,index) => (
+                                                        <span key={index}>{genre}</span>
+                                                    ))}</p>
+                                                </div>
+                                            </div>
+                                        </li>
+                                    ))}
+                                </ul>
+                            </div>
+                        </div>
+                    </section>
+                    : <></>
+            }
+
             <Footer />
         </div>
     )
