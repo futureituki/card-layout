@@ -529,7 +529,10 @@ export default function Page({ params }: { params: { artist_id: string } }) {
                             {relatedArtists.map((artist,index)=> (
                                 <li key={index} className="d-demo__item-related">
                                     <div role="button" onClick={() => goLink(`/artists/${artist.id}`)}>
-                                        {artist.images[0] ? <Image loading="lazy" src={artist.images[0]?.url} alt="" width={300} height={300} /> : ''}
+                                        {artist.images[0] ? <Image id={artist.name} loading="lazy" src={artist.images[0]?.url} alt="" width={300} height={300}
+                                                                   onLoadingComplete={() => {
+                                            let relate_imageElement = document.getElementById(`#${artist.name}`)
+                                                                       relate_imageElement?.classList.remove('img_load')}}/> : ''}
                                         <div className="related__artists__info">
                                             <p className="related_artists__name" id="related__name">{artist.name}</p>
                                             <p className="related__artists__genre">{artist.genres.map((genre,index) => (
