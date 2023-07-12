@@ -510,6 +510,11 @@ IE11対策
         width: 12rem;
     }
 }
+@media (min-width: 1500px) {
+    .top_visual {
+        padding-top: calc(60vh - var(--height)/2);
+    }
+}
 @media (max-width: 550px) {
     .side__music__menu {
         width: 100vw;
