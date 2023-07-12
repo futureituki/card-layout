@@ -16,12 +16,12 @@ const Header:FC<Props> = ({ textWhite = false }) => {
                 </Link>
             </div>
             <div className="header_pc_area">
-                <Link href="/" id="main_title" style={textWhite ? {color:"white"} : {color:"black"}}>
+                <Link href="/" id="main_title">
                     MyFavorite Artist-Site
                 </Link>
                 <ul className="ul_style">
                     {NavList.map((nav) => (
-                            <li id="link" style={textWhite ? {color:"white"} : {color:"black"}} className="li_style" key={nav.name}>
+                            <li id="link" className="li_style" key={nav.name}>
                                 <Link href={nav.href}>
                                     {nav.name}
                                 </Link>

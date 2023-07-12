@@ -23,10 +23,12 @@ export default function Home() {
             opacity:1,
             scale:1,
         })
-        // Gsap.to('#link', {
-        //     duration:1,
-        //     color:'#fff',
-        // })
+        Gsap.to('#link', {
+            color:'#fff',
+        })
+        Gsap.to('#main_title', {
+            color:"#fff",
+        })
         Gsap.fromTo(`#${font_id}`, {
             y:30,
             opacity:0,
@@ -44,6 +46,12 @@ export default function Home() {
         //     duration:1,
         //     color:'#000',
         // })
+        Gsap.to('#link', {
+            color:'#000',
+        })
+        Gsap.to('#main_title', {
+            color:"#000",
+        })
         Gsap.fromTo(`#${font_id}`, {
             y:0,
             opacity:1,

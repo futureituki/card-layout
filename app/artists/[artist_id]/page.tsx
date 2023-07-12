@@ -103,6 +103,12 @@ export default function Page({ params }: { params: { artist_id: string } }) {
             duration:4,
             opacity:1,
         })
+        Gsap.to('#link', {
+            color:'#000',
+        })
+        Gsap.to('#main_title', {
+            color:"#000",
+        })
         const getInfo = async() => {
             try {
             if(!artist) {
@@ -136,7 +142,6 @@ export default function Page({ params }: { params: { artist_id: string } }) {
                             localStorage.setItem('token', token)
                         }
                         await test()
-                    console.log('aa')
                         console.log(e)
                         getInfo()
                 }
