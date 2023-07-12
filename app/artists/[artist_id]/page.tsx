@@ -526,7 +526,9 @@ export default function Page({ params }: { params: { artist_id: string } }) {
                             ))}
                         </ul>
                         <ul className="d-demo__list d-demo__list--left">
-                            {relatedArtists.map((artist,index)=> (
+                            {
+                                relatedArtists ?
+                            relatedArtists.map((artist,index)=> (
                                 <li key={index} className="d-demo__item-related">
                                     <div role="button" onClick={() => goLink(`/artists/${artist.id}`)}>
                                         {artist.images[0] ? <Image id={artist.name} loading="lazy" src={artist.images[0]?.url} alt="" width={300} height={300}
@@ -541,7 +543,9 @@ export default function Page({ params }: { params: { artist_id: string } }) {
                                         </div>
                                     </div>
                                 </li>
-                            ))}
+                            ))
+                                    : <></>
+                            }
                         </ul>
                     </div>
                 </div>
