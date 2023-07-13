@@ -426,7 +426,7 @@ export default function Page({ params }: { params: { artist_id: string } }) {
             {artist ?
                 <>
                 <div className="disc__name">
-                <h2>Career</h2>
+                <h2>Biography</h2>
             </div>
                     <div className="sp__timeline">
                         {ArtistHistory.get(artist.name)?.map((data, idx) => (
