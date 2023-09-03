@@ -203,65 +203,7 @@ export default function Page({ params }: { params: { artist_id: string } }) {
             }
         }
     }
-//     const mouseLeaveHandler = (e:any) => {
-//         console.log('tt')
-//         if(mouseRef.current) {
-//                 /* @ts-ignore */
-//                 Gsap.to(`.${mouseRef.current.className}`, { autoAlpha: 0, duration: 0.4, zIndex:0 });
-//         }
-//     }
-//     const mouseMoveHandler = (e:any, id:string) => {
-//         console.log('aa')
-//         if(mouseRef.current) {
-//             /* @ts-ignore */
-//             /* @ts-ignore */
-//             const image = document.querySelector('.disc_' + `${id}`)!
-//             console.log(image)
-//             let linkX = image.getBoundingClientRect().left + 50;
-//             /* @ts-ignore */
-//             let linkY = image.getBoundingClientRect().top + 50;
-//             console.log(linkX, linkY)
-//             let cursorX = e.clientX;
-//             let cursorY = e.clientY;
-//             let centerPoint:{x:number,y:number} = {x:0,y:0};
-//             centerPoint.x = cursorX
-//             centerPoint.y = cursorY
-//             Gsap.to(`.${mouseRef.current.className}`, {translateX: centerPoint.x, translateY: centerPoint.y, overwrite: false, duration:0.4});
-//         }
-//     }
-//     const mouseEnterHandler = (e:MouseEvent, id:string) => {
-// //イベントオブジェクトを参照し、カーソル位置情報を取得
-//         if(mouseRef.current) {
-//             // const mousePosX = e.clientX;
-//             // const mousePosY = e.clientY;
-//             // const mouseWidth = mouseRef.current.clientWidth;
-//             // const cssPosAjust = mouseWidth / 2;
-//             // const x = mousePosX - cssPosAjust;
-//             // const y = mousePosY;
-//             /* @ts-ignore */
-//             const image = document.querySelector('.disc_'+`${id}`)!
-//             console.log(image)
-//             let linkX = image.getBoundingClientRect().left;
-//             /* @ts-ignore */
-//             let linkY = image.getBoundingClientRect().top;
-//             console.log(linkX, linkY)
-//             let cursorX = e.clientX;
-//             let cursorY = e.clientY;
-//             console.log(cursorX, cursorY)
-//             let centerPoint:{x:number,y:number} = {x:0,y:0};
-//             centerPoint.x = cursorX
-//             centerPoint.y = cursorY
-//             Gsap.set(`.${mouseRef.current.className}`, { translateX: centerPoint.x, translateY: centerPoint.y });
-//             Gsap.to(`.${mouseRef.current.className}`, { autoAlpha: 1, duration: 0.2 });
-// //カーソルの位置情報を「mouseStalker」に反映
-// //             Gsap.to(`.${mouseRef.current.className}`, {
-// //                 left:e.clientX,
-// //                 top:e.clientY,
-// //                 opacity:1,
-// //                 duration:1,
-// //             })
-//         }
-//     }
+
     const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
 
     const mouseEnterHandler = (e:any) => {
@@ -291,54 +233,7 @@ export default function Page({ params }: { params: { artist_id: string } }) {
             })
         }
     };
-    // const HistoryScroll = () => {
-    //     if(!historyRef.current) return
-    //     const historys = historyRef.current.querySelectorAll('.parts__window')
-    //     const firstHistory = historys[0]
-    //     const secondHistory = historys[1]
-    //     const thirdHistory = historys[2]
-    //     if(firstHistory.getBoundingClientRect().top < 350) {
-    //         Gsap.fromTo(firstHistory, {
-    //             duration:.1,
-    //             translateY:0,
-    //         }, {
-    //             duration:.1,
-    //             translateY:firstHistory.getBoundingClientRect().top,
-    //         })
-    //         // Gsap.to(firstHistory, {
-    //         //     duration:.1,
-    //         //     translateY:firstHistory.getBoundingClientRect().top,
-    //         // })
-    //         }
-    //     if(secondHistory.getBoundingClientRect().top < 350) {
-    //         Gsap.to(secondHistory, {
-    //             duration:.1,
-    //             // translateY:window.scrollY - secondHistory.getBoundingClientRect().top,
-    //         })
-    //         if(thirdHistory.getBoundingClientRect().top < 350) {
-    //             Gsap.to(thirdHistory, {
-    //                 duration:.1,
-    //                 // translateY:window.scrollY - thirdHistory.getBoundingClientRect().top,
-    //             })
-    //         }
-    //     }
-    //     // if(firstHistory.pageY > 800) {
-    //     //     console.log('test')
-    //     // }
-    //
-    //          // const history = ref.current
-    //     //     // history.scrollLeft = history.scrollWidth
-    //     // }
-    // }
-    // useEffect(() => {
-    //     if (historyRef.current) {
-    //         HistoryScroll();
-    //         window.addEventListener("scroll", HistoryScroll);
-    //
-    //         // アンマウント時にイベントリスナーを解除
-    //     }
-    //     // マウント時にも実行
-    // }, []);
+
     const createVisualize = (audioElement:HTMLAudioElement, className:string) => {
         audioElement.crossOrigin = "anonymous";
         setPrevName(className)
@@ -475,6 +370,7 @@ export default function Page({ params }: { params: { artist_id: string } }) {
                                     <div role="button" onClick={() => playMusic(item.preview_url, `canvas_${index + 1}`)}>
                                         <span>{index + 1}</span>
                                         <div className="disc__icon">
+                                            <Image src="/start.png" alt="" width={30} height={30} />
                                             <span style={playMusicSrc === item.preview_url ? {display:'block'}: {display:'none'}}></span>
                                             {item.preview_url === null ? <div></div> : <canvas className={["play_canvas",`canvas_${index + 1}`].join(' ')}/>}
                                             {item.preview_url === null ? <div></div> : <Image src={item.disc_img} alt={item.name} width={60} height={60} />}
