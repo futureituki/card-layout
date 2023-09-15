@@ -1,21 +1,21 @@
 'use client'
-import './page.css'
-import Image from "next/image";
-import {ArtistHistory, Artists} from "@/constants/artists";
-import Link from "next/link";
-import {useEffect, useState, useRef, useCallback} from "react";
-import Gsap from "gsap";
-import axios, {AxiosError} from "axios";
-import Footer from '@/components/shard/Footer/footer'
 import Button from "@/components/shard/Button/button";
+import Footer from '@/components/shard/Footer/footer';
+import { TimelineItem } from '@/components/shard/TimeLineItem';
 import PartsWindow from "@/components/shard/Window/parts-window";
-import {Disc, Music} from "@/type/disc";
-import {Artist} from "@/type/artists";
-import {getToken} from "@/utils/spotify_auth/auth";
-import {useRouter} from "next/navigation";
-import {useInView} from "react-intersection-observer";
-import InfiniteScroll  from "react-infinite-scroller"
-import { TimelineItem } from '@/components/shard/TimeLineItem'
+import { ArtistHistory, Artists } from "@/constants/artists";
+import { Artist } from "@/type/artists";
+import { Disc, Music } from "@/type/disc";
+import { getToken } from "@/utils/spotify_auth/auth";
+import axios from "axios";
+import Gsap from "gsap";
+import Image from "next/image";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useCallback, useEffect, useRef, useState } from "react";
+import InfiniteScroll from "react-infinite-scroller";
+import { useInView } from "react-intersection-observer";
+import './page.css';
 export default function Page({ params }: { params: { artist_id: string } }) {
     const ref = useRef<HTMLDivElement>();
     const mouseRef = useRef<HTMLDivElement>(null)
@@ -370,7 +370,7 @@ export default function Page({ params }: { params: { artist_id: string } }) {
                                     <div role="button" onClick={() => playMusic(item.preview_url, `canvas_${index + 1}`)}>
                                         <span>{index + 1}</span>
                                         <div className="disc__icon">
-                                            <Image src="/start.png" alt="" width={30} height={30} />
+                                            {/* <Image src="/start.png" alt="" width={30} height={30} /> */}
                                             <span style={playMusicSrc === item.preview_url ? {display:'block'}: {display:'none'}}></span>
                                             {item.preview_url === null ? <div></div> : <canvas className={["play_canvas",`canvas_${index + 1}`].join(' ')}/>}
                                             {item.preview_url === null ? <div></div> : <Image src={item.disc_img} alt={item.name} width={60} height={60} />}
